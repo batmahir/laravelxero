@@ -1,0 +1,28 @@
+{
+    "name": "batmahir/laravelxero",
+    "description": "Laravel 5 for Xero API",
+    "authors": [
+        {
+            "name": "Bathulah Mahir",
+            "email": "bathulahmahir@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/support": ">=4.0",
+        "laravel/laravel": ">=5.4",
+        "ext-openssl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Batmahir\\Laravelxero\\": "src/"
+        }
+    },
+    "extra": {
+    "laravel": {
+        "providers": [
+            "Batmahir\\Laravelxero\\LaravelXeroProvider"
+        ]
+    }
+}
+}
