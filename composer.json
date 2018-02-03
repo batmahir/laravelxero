@@ -16,7 +16,10 @@
     "autoload": {
         "psr-4": {
             "Batmahir\\Laravelxero\\": "src/"
-        }
+        },
+        "files": [
+            "src/helper.php"
+        ]
     },
     "extra": {
     "laravel": {
