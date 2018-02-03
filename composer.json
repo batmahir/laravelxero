@@ -10,22 +10,11 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
-        "illuminate/support": ">=4.0",
         "ext-openssl": "*"
     },
     "autoload": {
         "psr-4": {
-            "Batmahir\\Laravelxero\\": "src/"
-        },
-        "files": [
-            "src/helper.php"
-        ]
-    },
-    "extra": {
-    "laravel": {
-        "providers": [
-            "Batmahir\\Laravelxero\\LaravelXeroProvider"
-        ]
+            "Batmahir\\Laravelxero\\": "src"
+        }
     }
-}
 }
