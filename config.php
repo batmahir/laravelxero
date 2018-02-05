@@ -1,12 +1,6 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | OAuth
-    |--------------------------------------------------------------------------
-    */
-    'oauth' => [
         /*
         |--------------------------------------------------------------------------
         | Callback URL
@@ -28,8 +22,63 @@ return [
         | application type (this package support for public only).
         |
         */
-        'consumer_key' => env('XERO_CUSTOMER_KEY', ''),
-        'consumer_secret' => env('XERO_CUSTOMER_SECRET', ''),
+        'consumer_key' => env('XERO_CONSUMER_KEY', ''),
+        'consumer_secret' => env('XERO_CONSUMER_SECRET', ''),
 
-    ],
+        /*
+        |--------------------------------------------------------------------------
+        | Xero endpoint for request token
+        |--------------------------------------------------------------------------
+        |
+        | Request token endpoint for getting the Xero oauth token and oauth secret
+        |
+        | Important Note : Only change this value when this endpoint is changed.
+        |
+        */
+        'request_token_endpoint' => 'https://api.xero.com/oauth/RequestToken',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Xero endpoint for authorization
+        |--------------------------------------------------------------------------
+        |
+        | Authorization url (will get new oauth token and automatically replace
+        | the old oauth token)
+        |
+        | Important Note : Only change this value when Xero authorization endpoint is changed.
+        |
+        */
+        'authorization_endpoint' => 'https://api.xero.com/oauth/Authorize',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Xero endpoint for access token
+        |--------------------------------------------------------------------------
+        |
+        | Authorization url for getting the Xero oauth token and oauth secret
+        |
+        | Important Note : Only change this value when this endpoint is changed.
+        |
+        */
+        'access_token_endpoint' => ' https://api.xero.com/oauth/AccessToken',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Signature Method
+        |--------------------------------------------------------------------------
+        |
+        | Important Note : Right now only support HMAC-SHA1
+        |
+        */
+        'oauth_signature_method' => ' HMAC-SHA1',
+
+        /*
+        |--------------------------------------------------------------------------
+        | OAuth Version
+        |--------------------------------------------------------------------------
+        |
+        */
+        'oauth_version' => ' 1.0',
+
+
 ];
