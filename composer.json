@@ -7,7 +7,6 @@
             "email": "bathulahmahir@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
         "ext-openssl": "*"
