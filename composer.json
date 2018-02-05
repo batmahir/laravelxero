@@ -8,6 +8,12 @@
         }
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/batmahir/laravelxero.git"
+        }
+    ],
     "require": {
         "php": ">=7.0",
         "ext-openssl": "*"
@@ -15,7 +21,6 @@
     "require-dev": {
         "illuminate/support": ">=5.3"
     },
-    "tags": "v1.0.2-dev",
     "autoload": {
         "psr-4": {
             "Batmahir\\Laravelxero\\": "src/"
