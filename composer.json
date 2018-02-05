@@ -10,8 +10,10 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
-        "ext-openssl": "*",
-        "illuminate/support": "^5.7@dev"
+        "ext-openssl": "*"
+    },
+    "require-dev": {
+        "illuminate/support": ">=5.3"
     },
     "autoload": {
         "psr-4": {
