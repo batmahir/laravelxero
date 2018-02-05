@@ -49,6 +49,11 @@ class Xero
     /*
      * OAuth Signature Method
      */
+    protected $signature;
+
+    /*
+     * OAuth Signature Method
+     */
     protected $oauth_signature_method;
 
     /*
@@ -56,14 +61,28 @@ class Xero
      */
     protected $oauth_version;
 
+    /*
+     * OAuth verifier
+     */
+    protected $oauth_verifier;
+
 
     /**
      * Xero constructor.
      */
     public function __construct()
     {
-        $this->consumer_key = '';
-        $this->consumer_secret = '';
+        $this->consumer_key = config('xerobat.consumer_key');
+        $this->consumer_secret = config('xerobat.consumer_secret');
+
+        $this->callback = config('xerobat.callback');
+
+        $this->request_token_endpoint = config('xerobat.request_token_endpoint');
+        $this->authorization_endpoint = config('xerobat.authorization_endpoint');
+        $this->access_token_endpoint = config('xerobat.access_token_endpoint');
+
+        $this->oauth_signature_method = config('xerobat.oauth_signature_method');
+        $this->oauth_version =  config('xerobat.oauth_version');
     }
 
 
@@ -75,8 +94,8 @@ class Xero
     public function getRequestTokenArray()
     {
         return [
-            'oauth_callback' => '',
-            'oauth_consumer_key' => '',
+            'oauth_callback' => $this->callback,
+            'oauth_consumer_key' => $this->consumer_key,
         ];
     }
 
@@ -84,7 +103,7 @@ class Xero
     public function getAuthorizationArray()
     {
         return [
-            'oauth_token' => '',
+            'oauth_token' => $this->oauth_token,
             'scope' => ''
         ];
     }
@@ -92,19 +111,20 @@ class Xero
     public function getAccessTokenArray()
     {
         return [
-            'oauth_consumer_key' => '',
-            'oauth_token' => '',
-            'oauth_verifier'=> ''
+            'oauth_consumer_key' => $this->consumer_key,
+            'oauth_token' => $this->oauth_token,
+            'oauth_verifier'=> $this->oauth_verifier
         ];
     }
 
     public function getMandatoryArray()
     {
         return [
-            'oauth_nonce'=> '',
-            'oauth_signature_method' => '',
-            'oauth_timestamp' => '',
-            'oauth_version' => ''
+            'oauth_nonce'=> $this->getNonce(),
+            'signature' => $this->signature,
+            'oauth_signature_method' => $this->oauth_signature_method,
+            'oauth_timestamp' => time(),
+            'oauth_version' => $this->oauth_version
         ];
     }
 
