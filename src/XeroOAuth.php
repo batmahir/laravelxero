@@ -3,12 +3,9 @@
 namespace Batmahir\Laravelxero;
 
 use Ixudra\Curl\Facades\Curl;
-use Batmahir\Laravelxero\FileHelper;
 
 class XeroOAuth extends Xero
 {
-
-    use FileHelper;
 
     public function __construct()
     {
