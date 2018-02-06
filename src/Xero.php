@@ -171,68 +171,15 @@ class Xero
         return $this;
     }
 
-    /**
-     * Get mandatory Url Query String
-     *
-     * @param $situation
-     * @return array|Xero
-     * @throws LaravelXeroException
-     */
-    public function getMandatoryUrlQueryString($situation)
-    {
-        $arrays = array();
-
-        switch ($situation)
-        {
-            case "request-token":
-
-                $arrays = $this->getRequestTokenArray();
-                break;
-
-            case "authorize":
-
-                $arrays = $this->getAuthorizationArray();
-                break;
-
-            case "access-token" :
-
-                $arrays = $this->getAccessTokenArray();
-                break;
-
-            default :
-
-                throw new LaravelXeroException("Unknown parameter passed");
-
-        }
-
-        return $arrays;
-    }
 
     public function assignSignatureToAttribute()
     {
         $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$this->parameterWithoutSignature);
-        //$this->xeroAttributeArray['oauth_signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
         $this->signature = $this->generateSignature($combinedString,$this->combinedSecret);
 
         return $this;
     }
 
-
-    public function requestToken()
-    {
-        $this->getRequestTokenArray()->getMandatoryArray();
-
-        $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
-        $this->assignSignatureToAttribute();
-
-        $parameter_UrlQuery = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
-        $this->url_parameter = $this->appendParameterToUrlQuery($parameter_UrlQuery,['oauth_signature' => $this->signature]);
-
-        $request_token_url = $this->turnToFullUrl($this->request_token_endpoint,$this->url_parameter);
-
-        return $request_token_url;
-
-    }
 
     public function authorize($direct_redirect = true)
     {
