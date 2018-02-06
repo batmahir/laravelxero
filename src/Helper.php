@@ -130,5 +130,27 @@ trait Helper
             : \Illuminate\Container\Container::getInstance()->makeWith($abstract, $parameters);
     }
 
+    /**
+     * Get / set the specified session value.
+     *
+     * If an array is passed as the key, we will assume you want to set an array of values.
+     *
+     * @param  array|string  $key
+     * @param  mixed  $default
+     * @return mixed|\Illuminate\Session\Store|\Illuminate\Session\SessionManager
+     */
+    public function session($key = null, $default = null)
+    {
+        if (is_null($key)) {
+            return $this->app('session');
+        }
+
+        if (is_array($key)) {
+            return $this->app('session')->put($key);
+        }
+
+        return $this->app('session')->get($key, $default);
+    }
+
 
 }
