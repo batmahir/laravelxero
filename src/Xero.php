@@ -96,6 +96,11 @@ class Xero
      */
     protected $org;
 
+    /*
+     * File for storing the xero attribute data , this package not using session and etc.
+     */
+    protected $file;
+
     /**
      * Xero constructor.
      */
@@ -114,6 +119,8 @@ class Xero
         $this->oauth_version =  config('xerobat.oauth_version');
 
         $this->combinedSecret = $this->consumer_secret.'&';
+
+        $this->file = realpath(dirname(__FILE__)).'/../xerodata.json';
     }
 
     /**
