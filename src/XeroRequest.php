@@ -12,7 +12,6 @@ class XeroRequest extends XeroOAuth
     {
         $xero = new XeroOAuth();
         $request = $xero->request()->all();
-        $xero->getAccessTokenArray();
         $xero->setOAuthAttribute($request);
         return $xero->accessToken();
 

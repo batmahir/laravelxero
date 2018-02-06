@@ -73,13 +73,15 @@ class XeroOAuth extends Xero
 
     public function accessToken()
     {
+        $this->getAccessTokenArray()->getMandatoryArray();
+
         $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
         $this->assignSignatureToAttribute();
 
         $parameter_UrlQuery = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
         $this->url_parameter = $this->appendParameterToUrlQuery($parameter_UrlQuery,['oauth_signature' => $this->signature]);
 
-        $this->full_url_to_be_request = $this->turnToFullUrl($this->request_token_endpoint,$this->url_parameter);
+        $this->full_url_to_be_request = $this->turnToFullUrl($this->access_token_endpoint,$this->url_parameter);
 
         return $this;
     }
@@ -89,6 +91,10 @@ class XeroOAuth extends Xero
         $this->oauth_token = $request['oauth_token'];
         $this->oauth_verifier = $request['oauth_verifier'];
         $this->org = $request['org'];
+
+        $xeroData = json_decode(file_get_contents($this->file));
+        $this->oauth_secret = $xeroData->oauth_secret;
+        $this->combinedSecret = $xeroData->combinedSecret;
 
         return $this;
     }
