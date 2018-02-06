@@ -91,6 +91,11 @@ class Xero
      */
     protected $parameterWithoutSignature;
 
+    /*
+     * This parameter will have value after the authorization complete
+     */
+    protected $org;
+
     /**
      * Xero constructor.
      */

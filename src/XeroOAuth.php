@@ -67,9 +67,20 @@ class XeroOAuth extends Xero
 
     }
 
+    public function setOAuthAttribute($request)
+    {
+        $this->oauth_token = $request['oauth_token'];
+        $this->oauth_verifier = $request['oauth_verifier'];
+        $this->org = $request['org'];
+
+        return $this;
+    }
+
     public static function xeroCallback()
     {
-        static::request();
+        $xero = new XeroOAuth();
+        $request = $xero->request()->all();
+        return $xero->setOAuthAttribute($request);
     }
 
 }
