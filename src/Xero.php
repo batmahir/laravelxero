@@ -3,7 +3,6 @@
 namespace Batmahir\Laravelxero;
 
 use Batmahir\Laravelxero\Helper;
-use Ixudra\Curl\Facades\Curl;
 
 class Xero
 {
@@ -81,6 +80,11 @@ class Xero
      * Parameter of the url query string
      */
     protected $url_parameter;
+
+    /*
+     * Full url to be request
+     */
+    protected $full_url_to_be_request;
 
     /*
      * Value to be used in for generating signature together with $combinedSecret
