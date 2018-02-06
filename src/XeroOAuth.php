@@ -3,9 +3,12 @@
 namespace Batmahir\Laravelxero;
 
 use Ixudra\Curl\Facades\Curl;
+use Batmahir\Laravelxero\FileHelper;
 
 class XeroOAuth extends Xero
 {
+
+    use FileHelper;
 
     public function __construct()
     {
@@ -59,6 +62,7 @@ class XeroOAuth extends Xero
             throw new LaravelXeroException("No endpoint is set");
         }
 
+        $this->getCurrentPath();
         file_put_contents("../xerodata.txt",collect($this->getAllAttribute())->toJson());
 
         if($direct_redirect == true)
