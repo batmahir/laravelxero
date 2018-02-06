@@ -60,7 +60,7 @@ return [
         | Important Note : Only change this value when this endpoint is changed.
         |
         */
-        'access_token_endpoint' => ' https://api.xero.com/oauth/AccessToken',
+        'access_token_endpoint' => 'https://api.xero.com/oauth/AccessToken',
 
         /*
         |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
         |--------------------------------------------------------------------------
         |
         */
-        'oauth_version' => ' 1.0',
+        'oauth_version' => '1.0',
 
 
 ];
