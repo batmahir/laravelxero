@@ -49,11 +49,18 @@ trait Helper
         return $mergedString;
     }
 
-    public function turnToXeroMixedCombinedString($request_method , $url ,$parameter)
+    public function turnToXeroFormatForSignatureData($request_method , $url ,$parameter)
     {
         $combinedString = $request_method.'&'.urlencode($url).'&'.urlencode($parameter);
 
         return $combinedString;
+    }
+
+    public function turnToFullUrl($url,$parameter)
+    {
+        $fullUrl = $url.'?'.$parameter;
+
+        return $fullUrl;
     }
 
     public function generateSignature($mixedCombinedString,$combined_secret)

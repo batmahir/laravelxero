@@ -66,6 +66,20 @@ class Xero
      */
     protected $oauth_verifier;
 
+    /*
+     * Xero attribte array
+     */
+    protected $xeroAttributeArray;
+
+    /*
+     * Consumer secret and OAuth secret combined together
+     */
+    protected $combinedSecret;
+
+    /*
+     * Parameter of the url query string
+     */
+    protected $url_parameter;
 
     /**
      * Xero constructor.
@@ -83,69 +97,101 @@ class Xero
 
         $this->oauth_signature_method = config('xerobat.oauth_signature_method');
         $this->oauth_version =  config('xerobat.oauth_version');
+
+        $this->combinedSecret = $this->consumer_secret.'&';
     }
 
-
+    /**
+     * Get All attribute of the class
+     *
+     * @return array
+     */
     public function getAllAttribute()
     {
         return get_object_vars($this);
     }
 
+    /**
+     * Get array for the 'request token' endpoint
+     *
+     * @return $this
+     */
     public function getRequestTokenArray()
     {
-        return [
-            'oauth_callback' => $this->callback,
-            'oauth_consumer_key' => $this->consumer_key,
-        ];
+        $this->xeroAttributeArray['oauth_callback'] = $this->callback;
+        $this->xeroAttributeArray['oauth_consumer_key'] = $this->consumer_key;
+
+        return $this;
     }
 
-
+    /**
+     * Get array for the 'authorization' endpoint
+     *
+     * @return $this
+     */
     public function getAuthorizationArray()
     {
-        return [
-            'oauth_token' => $this->oauth_token,
-            'scope' => ''
-        ];
+        $this->xeroAttributeArray['oauth_token'] = $this->oauth_token;
+        $this->xeroAttributeArray['scope'] = $this->oauth_token;
+
+        return $this;
     }
 
+    /**
+     * Get array for the 'access token' endpoint
+     *
+     * @return $this
+     */
     public function getAccessTokenArray()
     {
-        return [
-            'oauth_consumer_key' => $this->consumer_key,
-            'oauth_token' => $this->oauth_token,
-            'oauth_verifier'=> $this->oauth_verifier
-        ];
+        $this->xeroAttributeArray['oauth_consumer_key'] = $this->consumer_key;
+        $this->xeroAttributeArray['oauth_token'] = $this->oauth_token;
+        $this->xeroAttributeArray['oauth_verifier'] = $this->oauth_verifier;
+
+        return $this;
     }
 
+    /**
+     * Get mandatory array for all the Xero's endpoint
+     *
+     * @return $this
+     */
     public function getMandatoryArray()
     {
-        return [
-            'oauth_nonce'=> $this->getNonce(),
-            'signature' => $this->signature,
-            'oauth_signature_method' => $this->oauth_signature_method,
-            'oauth_timestamp' => time(),
-            'oauth_version' => $this->oauth_version
-        ];
+        $this->xeroAttributeArray['oauth_nonce'] = $this->getNonce();
+        $this->xeroAttributeArray['oauth_signature_method'] = $this->oauth_signature_method;
+        $this->xeroAttributeArray['oauth_timestamp'] = time();
+        $this->xeroAttributeArray['oauth_version'] = $this->oauth_version;
+
+        return $this;
     }
 
+    /**
+     * Get mandatory Url Query String
+     *
+     * @param $situation
+     * @return array|Xero
+     * @throws LaravelXeroException
+     */
     public function getMandatoryUrlQueryString($situation)
     {
+        $arrays = array();
 
         switch ($situation)
         {
             case "request-token":
 
-                $this->getRequestTokenArray();
+                $arrays = $this->getRequestTokenArray();
                 break;
 
             case "authorize":
 
-                $this->getAuthorizationArray();
+                $arrays = $this->getAuthorizationArray();
                 break;
 
             case "access-token" :
 
-                $this->getAccessTokenArray();
+                $arrays = $this->getAccessTokenArray();
                 break;
 
             default :
@@ -153,10 +199,29 @@ class Xero
                 throw new LaravelXeroException("Unknown parameter passed");
 
         }
+
+        return $arrays;
     }
+
+    public function assignSignatureToAttribute()
+    {
+        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$this->url_parameter);
+        $this->xeroAttributeArray['signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
+
+        return $this;
+    }
+
 
     public function requestToken()
     {
+        $all_parameter = $this->getRequestTokenArray()->getMandatoryArray()->assignSignatureToAttribute();
+
+        $parameter = $this->turnArrayToUrlQuery($all_parameter->xeroAttributeArray);
+        $this->parameter = $parameter;
+
+        $request_token_url = $this->turnToFullUrl($this->request_token_endpoint,$parameter);
+
+        return $request_token_url;
 
     }
 
