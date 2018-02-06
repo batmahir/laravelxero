@@ -30,6 +30,8 @@ class XeroOAuth extends Xero
 
     public function sendGetRequestForRequestToken()
     {
+        $this->requestToken();
+
         if(!isset($this->full_url_to_be_request))
         {
             throw new LaravelXeroException("No endpoint is set");
@@ -47,6 +49,8 @@ class XeroOAuth extends Xero
 
     public function authorize($direct_redirect = true)
     {
+        $this->requestToken()->sendGetRequestForRequestToken();
+
         $this->full_url_to_be_request = $this->authorization_endpoint.'?oauth_token='.$this->oauth_token.'&scope=';
 
         if(!isset($this->full_url_to_be_request))
@@ -54,7 +58,12 @@ class XeroOAuth extends Xero
             throw new LaravelXeroException("No endpoint is set");
         }
 
+        if($direct_redirect == true)
+        {
+            header('Location: '.$this->full_url_to_be_request);
+        }
 
+        return $this->full_url_to_be_request;
 
     }
 
