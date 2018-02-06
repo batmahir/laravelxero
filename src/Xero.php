@@ -203,9 +203,9 @@ class Xero
         return $arrays;
     }
 
-    public function assignSignatureToAttribute()
+    public function assignSignatureToAttribute($parameterWithoutSignature)
     {
-        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$this->url_parameter);
+        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$parameterWithoutSignature);
         $this->xeroAttributeArray['oauth_signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
 
         return $this;
@@ -214,9 +214,12 @@ class Xero
 
     public function requestToken()
     {
-        $all_parameter = $this->getRequestTokenArray()->getMandatoryArray()->assignSignatureToAttribute();
+        $this->getRequestTokenArray()->getMandatoryArray();
 
-        $parameter = $this->turnArrayToUrlQuery($all_parameter->xeroAttributeArray);
+        $parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
+        $this->assignSignatureToAttribute($parameterWithoutSignature);
+
+        $parameter = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
         $this->parameter = $parameter;
 
         $request_token_url = $this->turnToFullUrl($this->request_token_endpoint,$parameter);
