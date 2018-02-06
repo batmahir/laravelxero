@@ -17,10 +17,12 @@
     "require": {
         "php": ">=7.0",
         "ext-openssl": "*",
-        "ixudra/curl": "^6.16"
+        "ixudra/curl": "^6.16",
+        "illuminate/support": "^5.5",
+        "illuminate/http": "^5.5",
+        "illuminate/container": "^5.5"
     },
     "require-dev": {
-        "illuminate/support": ">=5.3"
     },
     "autoload": {
         "psr-4": {

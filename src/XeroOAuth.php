@@ -67,4 +67,9 @@ class XeroOAuth extends Xero
 
     }
 
+    public static function xeroCallback()
+    {
+        static::request();
+    }
+
 }

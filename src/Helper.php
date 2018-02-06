@@ -88,4 +88,47 @@ trait Helper
     {
         return base64_encode(hash_hmac('sha1',$mixedCombinedString,$combined_secret ,true));
     }
+
+    /**
+     * Get an instance of the current request or an input item from the request.
+     *
+     * @param  array|string  $key
+     * @param  mixed   $default
+     * @return \Illuminate\Http\Request|string|array
+     */
+    public function request($key = null, $default = null)
+    {
+        if (is_null($key)) {
+            return $this->app('request');
+        }
+
+        if (is_array($key)) {
+            return $this->app('request')->only($key);
+        }
+
+        $value = $this->app('request')->__get($key);
+
+        return is_null($value) ? value($default) : $value;
+    }
+
+
+    /**
+     *  Get the available container instance.
+     *
+     * @param null $abstract
+     * @param array $parameters
+     * @return mixed
+     */
+    function app($abstract = null, array $parameters = [])
+    {
+        if (is_null($abstract)) {
+            return \Illuminate\Container\Container::getInstance();
+        }
+
+        return empty($parameters)
+            ? \Illuminate\Container\Container::getInstance()->make($abstract)
+            : \Illuminate\Container\Container::getInstance()->makeWith($abstract, $parameters);
+    }
+
+
 }
