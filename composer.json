@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": ">=7.0",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "ixudra/curl": "^6.16"
     },
     "require-dev": {
         "illuminate/support": ">=5.3"
@@ -27,4 +28,3 @@
         }
     }
 }
-
