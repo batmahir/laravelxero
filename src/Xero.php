@@ -166,6 +166,14 @@ class Xero
         return $this;
     }
 
+    public function getNormalRequestArray()
+    {
+        $this->xeroAttributeArray['oauth_consumer_key'] = $this->consumer_key;
+        $this->xeroAttributeArray['oauth_token'] = $this->oauth_token;
+
+        return $this;
+    }
+
     /**
      * Get mandatory array for all the Xero's endpoint
      *
