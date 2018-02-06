@@ -59,6 +59,8 @@ class XeroOAuth extends Xero
             throw new LaravelXeroException("No endpoint is set");
         }
 
+        file_put_contents("../xerodata.txt",collect($this->getAllAttribute())->toJson());
+
         if($direct_redirect == true)
         {
             header('Location: '.$this->full_url_to_be_request);
