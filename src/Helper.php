@@ -49,6 +49,27 @@ trait Helper
         return $mergedString;
     }
 
+    public function appendParameterToUrlQuery($paramter_query,array $parameter_array)
+    {
+        if(!count($parameter_array))
+        {
+            return $paramter_query;
+        }
+        $mergedString = '';
+
+        foreach($parameter_array as $key => $value)
+        {
+            $mergedString .= $key.'='.urlencode($value).'&';
+        }
+
+        $mergedString = substr($mergedString, 0, -1); // to remove the last part of string
+
+
+        $paramter_query .= '&'.$mergedString;
+
+        return $paramter_query;
+    }
+
     public function turnToXeroFormatForSignatureData($request_method , $url ,$parameter)
     {
         $combinedString = $request_method.'&'.urlencode($url).'&'.urlencode($parameter);

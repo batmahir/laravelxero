@@ -49,12 +49,12 @@ class Xero
     /*
      * OAuth Signature Method
      */
-    protected $signature;
+    protected $oauth_signature_method;
 
     /*
-     * OAuth Signature Method
+     * Signature value
      */
-    protected $oauth_signature_method;
+    protected $signature;
 
     /*
      * OAuth version
@@ -80,6 +80,11 @@ class Xero
      * Parameter of the url query string
      */
     protected $url_parameter;
+
+    /*
+     * Value to be used in for generating signature together with $combinedSecret
+     */
+    protected $parameterWithoutSignature;
 
     /**
      * Xero constructor.
@@ -203,10 +208,11 @@ class Xero
         return $arrays;
     }
 
-    public function assignSignatureToAttribute($parameterWithoutSignature)
+    public function assignSignatureToAttribute()
     {
-        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$parameterWithoutSignature);
-        $this->xeroAttributeArray['oauth_signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
+        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$this->parameterWithoutSignature);
+        //$this->xeroAttributeArray['oauth_signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
+        $this->signature = $this->generateSignature($combinedString,$this->combinedSecret);
 
         return $this;
     }
@@ -216,13 +222,13 @@ class Xero
     {
         $this->getRequestTokenArray()->getMandatoryArray();
 
-        $parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
-        $this->assignSignatureToAttribute($parameterWithoutSignature);
+        $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
+        $this->assignSignatureToAttribute();
 
-        $parameter = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
-        $this->parameter = $parameter;
+        $parameter_UrlQuery = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
+        $this->url_parameter = $this->appendParameterToUrlQuery($parameter_UrlQuery,['oauth_signature' => $this->signature]);
 
-        $request_token_url = $this->turnToFullUrl($this->request_token_endpoint,$parameter);
+        $request_token_url = $this->turnToFullUrl($this->request_token_endpoint,$this->url_parameter);
 
         return $request_token_url;
 
