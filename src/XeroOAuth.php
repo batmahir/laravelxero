@@ -2,6 +2,7 @@
 
 namespace Batmahir\Laravelxero;
 
+
 class XeroOAuth extends Xero
 {
     public function __construct()
@@ -22,6 +23,22 @@ class XeroOAuth extends Xero
         $request_token_url = $this->turnToFullUrl($this->request_token_endpoint,$this->url_parameter);
 
         return $request_token_url;
+
+    }
+
+    public function sendGetRequestForRequestToken()
+    {
+        $endpoint = $this->requestToken();
+        $curl =
+        Curl::to($endpoint)
+            ->asJson()
+            ->get();
+
+        return $curl;
+    }
+
+    public function authorize($direct_redirect = true)
+    {
 
     }
 

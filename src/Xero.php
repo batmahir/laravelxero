@@ -3,6 +3,7 @@
 namespace Batmahir\Laravelxero;
 
 use Batmahir\Laravelxero\Helper;
+use Ixudra\Curl\Facades\Curl;
 
 class Xero
 {
@@ -178,12 +179,6 @@ class Xero
         $this->signature = $this->generateSignature($combinedString,$this->combinedSecret);
 
         return $this;
-    }
-
-
-    public function authorize($direct_redirect = true)
-    {
-
     }
 
 }
