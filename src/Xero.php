@@ -206,7 +206,7 @@ class Xero
     public function assignSignatureToAttribute()
     {
         $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$this->url_parameter);
-        $this->xeroAttributeArray['signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
+        $this->xeroAttributeArray['oauth_signature'] = $this->generateSignature($combinedString,$this->combinedSecret);
 
         return $this;
     }

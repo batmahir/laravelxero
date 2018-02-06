@@ -70,7 +70,7 @@ return [
         | Important Note : Right now only support HMAC-SHA1
         |
         */
-        'oauth_signature_method' => ' HMAC-SHA1',
+        'oauth_signature_method' => 'HMAC-SHA1',
 
         /*
         |--------------------------------------------------------------------------
