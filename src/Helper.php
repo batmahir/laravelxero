@@ -41,7 +41,7 @@ trait Helper
 
         foreach($array as $key => $value)
         {
-            $mergedString .= $key.'='.$value.'&';
+            $mergedString .= $key.'='.urlencode($value).'&';
         }
 
         $mergedString = substr($mergedString, 0, -1); // to remove the last part of string
