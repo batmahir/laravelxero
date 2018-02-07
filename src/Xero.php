@@ -101,6 +101,11 @@ class Xero
      */
     protected $file;
 
+    /*
+     * Main endpoint to be request
+     */
+    protected $main_endpoint_to_be_request;
+
     /**
      * Xero constructor.
      */
@@ -199,7 +204,7 @@ class Xero
 
     public function assignSignatureToAttribute()
     {
-        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->request_token_endpoint,$this->parameterWithoutSignature);
+        $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->main_endpoint_to_be_request,$this->parameterWithoutSignature);
         $this->signature = $this->generateSignature($combinedString,$this->combinedSecret);
 
         return $this;

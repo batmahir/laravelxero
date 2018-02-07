@@ -16,6 +16,8 @@ class XeroOAuth extends Xero
     {
         $this->getRequestTokenArray()->getMandatoryArray();
 
+        $this->main_endpoint_to_be_request = $this->request_token_endpoint;
+
         $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
         $this->assignSignatureToAttribute();
 
@@ -74,6 +76,8 @@ class XeroOAuth extends Xero
     public function accessToken()
     {
         $this->getAccessTokenArray()->getMandatoryArray();
+
+        $this->main_endpoint_to_be_request = $this->access_token_endpoint;
 
         $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
         $this->assignSignatureToAttribute();
