@@ -93,8 +93,17 @@ class XeroOAuth extends Xero
         $this->org = $request['org'];
 
         $xeroData = json_decode(file_get_contents($this->file));
-        $this->oauth_secret = $xeroData->oauth_secret;
-        $this->combinedSecret = $xeroData->combinedSecret;
+
+        try{
+
+            $this->oauth_secret = $xeroData->oauth_secret;
+            $this->combinedSecret = $xeroData->combinedSecret;
+
+        }catch (\Exception $e)
+        {
+            throw new LaravelXeroException("Trying to get the authorized data without being authenticated");
+        }
+
 
         return $this;
     }
