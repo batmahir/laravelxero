@@ -42,6 +42,11 @@ class XeroOAuth extends Xero
 
         parse_str($requestTokenResponse, $requestTokenResponseArray);
 
+        if(isset($requestTokenResponseArray['oauth_problem']))
+        {
+            throw new LaravelXeroException($requestTokenResponseArray['oauth_problem'].','.$requestTokenResponseArray['oauth_problem_advice']);
+        }
+
         $this->oauth_token = $requestTokenResponseArray['oauth_token'];
         $this->oauth_secret = $requestTokenResponseArray['oauth_token_secret'];
         $this->combinedSecret = $this->combinedSecret.$this->oauth_secret;
