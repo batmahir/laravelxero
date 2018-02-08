@@ -72,6 +72,7 @@ trait Helper
 
     public function turnToXeroFormatForSignatureData($request_method , $url ,$parameter)
     {
+        $this->combinedStringNotEncoded = $request_method.'&'.$url.'&'.$parameter;
         $combinedString = $request_method.'&'.urlencode($url).'&'.urlencode($parameter);
 
         return $combinedString;

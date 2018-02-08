@@ -23,7 +23,6 @@ class XeroOAuth extends Xero
 
         $parameter_UrlQuery = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
         $this->url_parameter = $this->appendParameterToUrlQuery($parameter_UrlQuery,['oauth_signature' => $this->signature]);
-
         $this->full_url_to_be_request = $this->turnToFullUrl($this->request_token_endpoint,$this->url_parameter);
 
         return $this;
@@ -52,7 +51,7 @@ class XeroOAuth extends Xero
 
     public function authorize($direct_redirect = true)
     {
-        $this->requestToken()->sendGetRequestForRequestToken();
+        $this->sendGetRequestForRequestToken();
 
         $this->full_url_to_be_request = $this->authorization_endpoint.'?oauth_token='.$this->oauth_token.'&scope=';
 
@@ -75,17 +74,22 @@ class XeroOAuth extends Xero
 
     public function accessToken()
     {
-        $this->getAccessTokenArray()->getMandatoryArray();
-
         $this->main_endpoint_to_be_request = $this->access_token_endpoint;
 
-        $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
+        $this->parameterWithoutSignature =
+            "oauth_consumer_key=".$this->consumer_key.
+            "&oauth_nonce=".$this->nonce.
+            "&oauth_signature_method=".$this->oauth_signature_method.
+            "&oauth_timestamp=".$this->time.
+            "&oauth_token=".$this->oauth_token.
+            "&oauth_verifier=".$this->oauth_verifier.
+            "&oauth_version=".$this->oauth_version;
+
+        $this->combinedString = $this->turnToXeroFormatForSignatureData("GET",$this->main_endpoint_to_be_request,$this->parameterWithoutSignature);
+
         $this->assignSignatureToAttribute();
-
-        $parameter_UrlQuery = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
-        $this->url_parameter = $this->appendParameterToUrlQuery($parameter_UrlQuery,['oauth_signature' => $this->signature]);
-
-        $this->full_url_to_be_request = $this->turnToFullUrl($this->access_token_endpoint,$this->url_parameter);
+        $this->url_parameter = $this->appendParameterToUrlQuery($this->parameterWithoutSignature,['oauth_signature' => $this->signature]);
+        $this->full_url_to_be_request = $this->turnToFullUrl($this->main_endpoint_to_be_request,$this->url_parameter);
 
         return $this;
     }
@@ -107,7 +111,6 @@ class XeroOAuth extends Xero
         {
             throw new LaravelXeroException("Trying to get the authorized data without being authenticated");
         }
-
 
         return $this;
     }

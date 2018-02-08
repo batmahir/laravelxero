@@ -72,9 +72,14 @@ class Xero
     protected $xeroAttributeArray;
 
     /*
-     * Consumer secret and OAuth secret combined together
+     * Consumer secret and OAuth secret combined together urlencoded
      */
     protected $combinedSecret;
+
+    /*
+     *
+     */
+    protected $combinedSecretUrlDecoded;
 
     /*
      * Parameter of the url query string
@@ -110,6 +115,16 @@ class Xero
      * Values of combined request method with url and parameter based on Xero format
      */
     protected $combinedString;
+
+    /*
+     * Values of combined request method with url and parameter based on Xero format
+     */
+    protected $combinedStringNotEncoded;
+
+
+
+
+    protected $time;
     /**
      * Xero constructor.
      */
@@ -130,6 +145,10 @@ class Xero
         $this->combinedSecret = $this->consumer_secret.'&';
 
         $this->file = realpath(dirname(__FILE__)).'/../xerodata.json';
+
+        $this->time = time();
+
+        $this->nonce = $this->getNonce();
     }
 
     /**
@@ -199,7 +218,7 @@ class Xero
     {
         $this->xeroAttributeArray['oauth_nonce'] = $this->getNonce();
         $this->xeroAttributeArray['oauth_signature_method'] = $this->oauth_signature_method;
-        $this->xeroAttributeArray['oauth_timestamp'] = time();
+        $this->xeroAttributeArray['oauth_timestamp'] = $this->time;
         $this->xeroAttributeArray['oauth_version'] = $this->oauth_version;
 
         return $this;
@@ -210,7 +229,8 @@ class Xero
     {
         $combinedString = $this->turnToXeroFormatForSignatureData('GET',$this->main_endpoint_to_be_request,$this->parameterWithoutSignature);
         $this->combinedString = $combinedString;
-        $this->signature = $this->generateSignature($combinedString,$this->combinedSecret);
+        $this->combinedSecretUrlDecoded = urldecode($this->combinedString);
+        $this->signature = $this->generateSignature($this->combinedString,$this->combinedSecret);
 
         return $this;
     }
