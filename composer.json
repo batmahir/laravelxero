@@ -27,6 +27,9 @@
     "autoload": {
         "psr-4": {
             "Batmahir\\Laravelxero\\": "src/"
-        }
+        },
+        "files": [
+            "phpHelper.php"
+        ]
     }
 }

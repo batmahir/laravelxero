@@ -54,27 +54,33 @@ class Xero extends XeroMainParent
         return $this;
     }
 
-    public function authorize($direct_redirect = true)
+    public static function  authorize($direct_redirect = true)
     {
-        $this->sendGetRequestForRequestToken();
+        parent::$count_of_requesting_access_token = 0;
+        $xero = new Xero();
+        $xero->sendGetRequestForRequestToken();
 
-        $this->full_url_to_be_request = $this->authorization_endpoint.'?oauth_token='.$this->oauth_token.'&scope=';
+        $xero->full_url_to_be_request = $xero->authorization_endpoint.'?oauth_token='.$xero->oauth_token.'&scope=';
 
-        if(!isset($this->full_url_to_be_request))
+        if(!isset($xero->full_url_to_be_request))
         {
             throw new LaravelXeroException("No endpoint is set");
         }
 
-
-        file_put_contents($this->file ,collect($this->getAllAttribute())->toJson());
+        file_put_contents($xero->file ,collect($xero->getAllAttribute())->toJson());
 
         if($direct_redirect == true)
         {
-            header('Location: '.$this->full_url_to_be_request);
+            $xero->redirect($xero->full_url_to_be_request);
         }
 
-        return $this->full_url_to_be_request;
+        return $xero->full_url_to_be_request;
 
+    }
+
+    public function redirect($url)
+    {
+        header('Location: '.$url);
     }
 
     public function accessToken()
@@ -95,6 +101,27 @@ class Xero extends XeroMainParent
         $this->assignSignatureToAttribute();
         $this->url_parameter = $this->appendParameterToUrlQuery($this->parameterWithoutSignature,['oauth_signature' => $this->signature]);
         $this->full_url_to_be_request = $this->turnToFullUrl($this->main_endpoint_to_be_request,$this->url_parameter);
+
+
+        if(isset($this->xero_org_muid))
+        {
+            return $this;
+        }
+
+        $accessTokenResponse = Curl::to($this->full_url_to_be_request)->get();
+
+        parse_str($accessTokenResponse, $accessTokenResponseArray);
+
+        if(isset($accessTokenResponseArray['oauth_problem']))
+        {
+            throw new LaravelXeroException($accessTokenResponseArray['oauth_problem'].', '.$accessTokenResponseArray['oauth_problem_advice']);
+        }
+
+
+        $this->oauth_token = $accessTokenResponseArray['oauth_token'];
+        $this->oauth_secret = $accessTokenResponseArray['oauth_token_secret'];
+        $this->oauth_expires_in = $accessTokenResponseArray['oauth_expires_in'];
+        $this->xero_org_muid = $accessTokenResponseArray['xero_org_muid'];
 
         return $this;
     }
@@ -120,12 +147,11 @@ class Xero extends XeroMainParent
         return $this;
     }
 
-    public static function xeroCallback()
+    public static function xeroCallback($url)
     {
         $xero = new Xero();
         $request = $xero->request()->all();
-        $xero->setOAuthAttribute($request);
-        return $xero->accessToken();
+        $xero->setOAuthAttribute($request)->accessToken()->redirect($url);
 
     }
 

@@ -122,9 +122,12 @@ class XeroMainParent
     protected $combinedStringNotEncoded;
 
 
-
+    protected $oauth_expires_in;
+    protected $xero_org_muid;
 
     protected $time;
+
+    protected static $count_of_requesting_access_token;
     /**
      * Xero constructor.
      */
