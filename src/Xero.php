@@ -66,8 +66,7 @@ class Xero extends XeroMainParent
         {
             throw new LaravelXeroException("No endpoint is set");
         }
-
-        //file_put_contents($xero->file ,collect($xero->getAllAttribute())->toJson());
+        
         $request = $xero->request();
         $xero->session(
             [
@@ -140,7 +139,6 @@ class Xero extends XeroMainParent
         $this->oauth_verifier = $request['oauth_verifier'];
         $this->org = $request['org'];
 
-        //$xeroData = json_decode(file_get_contents($this->file));
         $xeroData = ($this->session()->all())['xero'];
         $xeroData = json_decode(json_encode($xeroData)); // array turn to object
 
