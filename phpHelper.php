@@ -15,3 +15,10 @@ function xmlConvertJson($xml_data)
 }
 
 
+function xeroUrl($add_path)
+{
+    $endpoint = config('xerobat.xero_main_data_endpoint').$add_path;
+    return $endpoint;
+}
+
+

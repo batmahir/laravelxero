@@ -63,6 +63,18 @@ return [
         'access_token_endpoint' => 'https://api.xero.com/oauth/AccessToken',
 
         /*
+       |--------------------------------------------------------------------------
+       | Xero main endpoint for normal data
+       |--------------------------------------------------------------------------
+       |
+       | normal data url for interacting with xero
+       |
+       | Important Note : Only change this value when this endpoint is changed.
+       |
+       */
+        'xero_main_data_endpoint' => 'https://api.xero.com/api.xro/2.0/',
+
+        /*
         |--------------------------------------------------------------------------
         | Signature Method
         |--------------------------------------------------------------------------

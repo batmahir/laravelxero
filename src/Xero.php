@@ -183,18 +183,35 @@ class Xero extends XeroMainParent
         //--------------------------------------------------------start here
 
         $this->getNormalRequestArray();
+        if(count($url_query_array))
+        {
+            $this->assignXeroAttributeArray($url_query_array);
+        }
+
+
         $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
 
 
         $this->combinedString = $this->turnToXeroFormatForSignatureData("GET",$this->main_endpoint_to_be_request,$this->parameterWithoutSignature);
         $this->assignSignatureToAttribute();
 
-        $this->url_parameter = $this->appendParameterToUrlQuery($this->parameterWithoutSignature,['oauth_signature' => $this->signature]);
+        $this->url_parameter = $this->appendParameterToUrlQuery($this->parameterWithoutSignature,
+            [
+                'oauth_signature' => $this->signature
+            ]);
         $this->full_url_to_be_request = $this->turnToFullUrl($this->main_endpoint_to_be_request,$this->url_parameter);
         $this->makeCall();
 
         return $this->response;
 
+    }
+
+    public function assignXeroAttributeArray($url_query_array)
+    {
+        foreach($url_query_array as $key => $value)
+        {
+            $this->xeroAttributeArray[$key] = $value;
+        }
     }
 
     public function makeCall()
@@ -205,6 +222,8 @@ class Xero extends XeroMainParent
 
         $this->response = xmlConvertJson($accessTokenResponse);
     }
+
+
 
 
 

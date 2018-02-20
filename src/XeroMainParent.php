@@ -213,7 +213,7 @@ class XeroMainParent
         $this->xeroAttributeArray['oauth_timestamp'] = time();
         $this->xeroAttributeArray['oauth_token'] = $this->oauth_token;
         $this->xeroAttributeArray['oauth_version'] = $this->oauth_version;
-        $this->xeroAttributeArray['order'] = "Total%20DESC";
+        //$this->xeroAttributeArray['order'] = "Total%20DESC";
         //oauth_signature
         //https://api.xero.com/api.xro/2.0/Invoices?=1KWF1TMQARJHVJF2XYLFU5ATD4MZT8&=srM1m&=xFb%2BSujEO6bM95g60%2FnDoG2W5qk%3D&=HMAC-SHA1&=1518160246&=U2JCAINDTMV3UIE2JQOKM64IDRLSCM&&=Total%20DESC
 
