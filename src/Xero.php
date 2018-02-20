@@ -176,6 +176,12 @@ class Xero extends XeroMainParent
         return $response;
     }
 
+    public function toUrl($url,array $url_query_array = array())
+    {
+        $response = $this->getNormalRequestFullUrl($url,$url_query_array);
+        return $response;
+    }
+
     public function getNormalRequestFullUrl($url,$url_query_array)
     {
         $this->main_endpoint_to_be_request = $url;
@@ -202,7 +208,7 @@ class Xero extends XeroMainParent
         $this->full_url_to_be_request = $this->turnToFullUrl($this->main_endpoint_to_be_request,$this->url_parameter);
         $this->makeCall();
 
-        return $this->response;
+        return $this;
 
     }
 
