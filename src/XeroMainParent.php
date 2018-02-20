@@ -206,7 +206,6 @@ class XeroMainParent
         $this->oauth_secret = Xero::getTokenForNormalRequest()->oauth_secret;
         $this->combinedSecret = $this->consumer_secret.'&'.$this->oauth_secret;
 
-
         $this->xeroAttributeArray['oauth_consumer_key'] = $this->consumer_key;
         $this->xeroAttributeArray['oauth_nonce'] = $this->getNonce();
         $this->xeroAttributeArray['oauth_signature_method'] = $this->oauth_signature_method;

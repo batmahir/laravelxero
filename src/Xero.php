@@ -214,10 +214,12 @@ class Xero extends XeroMainParent
 
     public function assignXeroAttributeArray($url_query_array)
     {
-        foreach($url_query_array as $key => $value)
+        /*foreach($url_query_array as $key => $value)
         {
             $this->xeroAttributeArray[$key] = $value;
-        }
+        }*/
+
+        $this->xeroAttributeArray = array_merge($url_query_array,$this->xeroAttributeArray);
     }
 
     public function makeCall()
