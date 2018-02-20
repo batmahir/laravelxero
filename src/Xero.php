@@ -110,11 +110,6 @@ class Xero extends XeroMainParent
         $this->full_url_to_be_request = $this->turnToFullUrl($this->main_endpoint_to_be_request,$this->url_parameter);
 
 
-        if(isset($this->xero_org_muid))
-        {
-            return $this;
-        }
-
         $accessTokenResponse = Curl::to($this->full_url_to_be_request)->get();
 
         parse_str($accessTokenResponse, $accessTokenResponseArray);
@@ -129,6 +124,15 @@ class Xero extends XeroMainParent
         $this->oauth_secret = $accessTokenResponseArray['oauth_token_secret'];
         $this->oauth_expires_in = $accessTokenResponseArray['oauth_expires_in'];
         $this->xero_org_muid = $accessTokenResponseArray['xero_org_muid'];
+
+        $request = $this->request();
+        $this->session(
+            [
+                'xero' => $this->getAllAttribute()
+            ]
+        );
+
+        $request->session()->save();
 
         return $this;
     }
@@ -147,6 +151,7 @@ class Xero extends XeroMainParent
             $this->oauth_secret = $xeroData->oauth_secret;
             $this->combinedSecret = $xeroData->combinedSecret;
 
+
         }catch (\Exception $e)
         {
             throw new LaravelXeroException("Trying to get the authorized data without being authenticated");
@@ -161,20 +166,47 @@ class Xero extends XeroMainParent
         $request = $xero->request()->all();
         $xero->setOAuthAttribute($request)->accessToken()->redirect($url);
 
+        return $xero;
+
     }
 
     public static function to($url,array $url_query_array = array())
     {
         $xeroRequest = new Xero();
-        $xeroRequest->getNormalRequestFullUrl($url,$url_query_array);
-        return Curl::to($url);
+        $response = $xeroRequest->getNormalRequestFullUrl($url,$url_query_array);
+        return $response;
     }
 
     public function getNormalRequestFullUrl($url,$url_query_array)
     {
-        $this->full_url_to_be_request = $url;
+        $this->main_endpoint_to_be_request = $url;
         $this->getNormalRequestArray();
+        //--------------------------------------------------------start here
+
+        $this->getNormalRequestArray();
+        $this->parameterWithoutSignature = $this->turnArrayToUrlQuery($this->xeroAttributeArray);
+
+
+        $this->combinedString = $this->turnToXeroFormatForSignatureData("GET",$this->main_endpoint_to_be_request,$this->parameterWithoutSignature);
+        $this->assignSignatureToAttribute();
+
+        $this->url_parameter = $this->appendParameterToUrlQuery($this->parameterWithoutSignature,['oauth_signature' => $this->signature]);
+        $this->full_url_to_be_request = $this->turnToFullUrl($this->main_endpoint_to_be_request,$this->url_parameter);
+        $this->makeCall();
+
+        return $this->response;
+
     }
+
+    public function makeCall()
+    {
+        $accessTokenResponse =
+            Curl::to($this->full_url_to_be_request)
+                ->get();
+
+        $this->response = xmlConvertJson($accessTokenResponse);
+    }
+
 
 
 
