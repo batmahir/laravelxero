@@ -56,7 +56,6 @@ class Xero extends XeroMainParent
 
     public static function  authorize($direct_redirect = true)
     {
-        parent::$count_of_requesting_access_token = 0;
         $xero = new Xero();
         $xero->sendGetRequestForRequestToken();
 
