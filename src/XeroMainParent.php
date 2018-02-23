@@ -249,12 +249,37 @@ class XeroMainParent
 
     public static function getTokenForNormalRequest()
     {
-        $xero = new Xero();
+        $xero = new \Batmahir\Laravelxero\Xero();
         $xeroData = ($xero->session()->all())['xero'];
         $xeroData = json_decode(json_encode($xeroData)); // array turn to object
 
 
         return $xeroData;
+    }
+
+
+    public static function construct()
+    {
+
+    }
+
+    public function assignAttributeValueAfterSuccessOAuth()
+    {
+        $this->oauth_token =  Xero::getTokenForNormalRequest()->oauth_token;
+        $this->oauth_secret = Xero::getTokenForNormalRequest()->oauth_secret;
+        $this->combinedSecret = $this->consumer_secret.'&'.$this->oauth_secret;
+
+        $this->xeroAttributeArray['oauth_consumer_key'] = $this->consumer_key;
+        $this->xeroAttributeArray['oauth_nonce'] = $this->getNonce();
+        $this->xeroAttributeArray['oauth_signature_method'] = $this->oauth_signature_method;
+        $this->xeroAttributeArray['oauth_timestamp'] = time();
+        $this->xeroAttributeArray['oauth_token'] = $this->oauth_token;
+        $this->xeroAttributeArray['oauth_version'] = $this->oauth_version;
+        //$this->xeroAttributeArray['order'] = "Total%20DESC";
+        //oauth_signature
+        //https://api.xero.com/api.xro/2.0/Invoices?=1KWF1TMQARJHVJF2XYLFU5ATD4MZT8&=srM1m&=xFb%2BSujEO6bM95g60%2FnDoG2W5qk%3D&=HMAC-SHA1&=1518160246&=U2JCAINDTMV3UIE2JQOKM64IDRLSCM&&=Total%20DESC
+
+        return $this;
     }
 
 }

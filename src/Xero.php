@@ -185,10 +185,11 @@ class Xero extends XeroMainParent
     public function getNormalRequestFullUrl($url,$url_query_array)
     {
         $this->main_endpoint_to_be_request = $url;
-        $this->getNormalRequestArray();
+        //$this->getNormalRequestArray()
+        $this->renewGetNonce();
+
         //--------------------------------------------------------start here
 
-        $this->getNormalRequestArray();
         if(count($url_query_array))
         {
             $this->assignXeroAttributeArray($url_query_array);
@@ -210,6 +211,11 @@ class Xero extends XeroMainParent
 
         return $this;
 
+    }
+
+    public function renewGetNonce()
+    {
+        $this->xeroAttributeArray['oauth_nonce'] = $this->getNonce();
     }
 
     public function assignXeroAttributeArray($url_query_array)
