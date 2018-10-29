@@ -9,7 +9,7 @@ class Xero extends XeroMainParent
 
     public function __construct()
     {
-        parent::__construct();//test
+        parent::__construct();
     }
 
     public function requestToken()
@@ -232,9 +232,10 @@ class Xero extends XeroMainParent
     {
         $accessTokenResponse =
             Curl::to($this->full_url_to_be_request)
+                ->withHeader( 'Accept: application/json')
                 ->get();
 
-        $this->response = xmlConvertJson($accessTokenResponse);
+        $this->response = json_decode($accessTokenResponse);
     }
 
 
