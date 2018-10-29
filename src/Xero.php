@@ -9,7 +9,7 @@ class Xero extends XeroMainParent
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct();//test
     }
 
     public function requestToken()
