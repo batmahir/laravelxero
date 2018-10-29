@@ -87,6 +87,7 @@ class Xero extends XeroMainParent
     public function redirect($url)
     {
         header('Location: '.$url);
+        exit();
     }
 
     public function accessToken()
